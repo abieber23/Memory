@@ -13,7 +13,7 @@ const FOREST_SYMBOLS = [
 export const THEMES: Record<ThemeName, Theme> = {
   ocean: {
     name: 'ocean',
-    label: 'Ocean 🌊',
+    label: 'Code vibes theme',
     symbols: OCEAN_SYMBOLS,
     colors: {
       primary: '#0369A1',
@@ -26,7 +26,7 @@ export const THEMES: Record<ThemeName, Theme> = {
   },
   forest: {
     name: 'forest',
-    label: 'Forest 🌲',
+    label: 'Gaming theme',
     symbols: FOREST_SYMBOLS,
     colors: {
       primary: '#15803D',
