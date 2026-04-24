@@ -29,6 +29,7 @@ export interface Theme {
   name: ThemeName;
   label: string;
   symbols: string[];
+  cardBackImage?: string;
   colors: ThemeColors;
 }
 

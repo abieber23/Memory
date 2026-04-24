@@ -38,6 +38,7 @@ export class GameBoard {
     r.style.setProperty('--color-card-back', colors.cardBack);
     r.style.setProperty('--color-card-front', colors.cardFront);
     r.style.setProperty('--color-accent', colors.accent);
+    this.container.dataset['theme'] = this.config.theme;
   }
 
   private render(): void {
@@ -51,8 +52,9 @@ export class GameBoard {
     grid.className = 'game-grid';
     const [cols] = getBoardDimensions(this.config.boardSize);
     grid.style.setProperty('--grid-cols', String(cols));
+    const backImage = getTheme(this.config.theme).cardBackImage ?? null;
     this.state.cards.forEach(card => {
-      grid.appendChild(createCardElement(card, c => this.handleClick(c)));
+      grid.appendChild(createCardElement(card, backImage, c => this.handleClick(c)));
     });
     return grid;
   }

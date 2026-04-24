@@ -1,4 +1,5 @@
-import type { GameState } from '../types/game.types';
+import type { GameState, Player } from '../types/game.types';
+import exitIconImg from '../img/Exit_Icon.png';
 
 export class ScoreBoard {
   private container: HTMLElement;
@@ -12,44 +13,54 @@ export class ScoreBoard {
   update(state: GameState): void {
     this.container.innerHTML = '';
     this.container.className = 'scoreboard';
-    this.container.appendChild(this.createPlayerInfo(state, 0));
-    this.container.appendChild(this.createCenter(state));
-    this.container.appendChild(this.createPlayerInfo(state, 1));
+    this.container.appendChild(this.buildPills(state));
+    this.container.appendChild(this.buildCurrentPlayer(state));
+    this.container.appendChild(this.buildExitBtn());
   }
 
-  private createPlayerInfo(state: GameState, index: 0 | 1): HTMLElement {
-    const player = state.players[index];
+  private buildPills(state: GameState): HTMLElement {
     const div = document.createElement('div');
-    div.className = `player-info player-info--${player.color}`;
-    if (state.currentPlayerIndex === index) div.classList.add('active');
-    div.innerHTML = `
-      <span class="player-label">Player ${player.id}</span>
-      <span class="player-score">${player.score}</span>
-    `;
+    div.className = 'scoreboard__pills';
+    state.players.forEach(p => div.appendChild(this.buildPill(p)));
     return div;
   }
 
-  private createCenter(state: GameState): HTMLElement {
+  private buildPill(player: Player): HTMLElement {
     const div = document.createElement('div');
-    div.className = 'scoreboard__center';
-    div.appendChild(this.createTurnIndicator(state));
-    div.appendChild(this.createExitButton());
+    div.className = `scoreboard__pill scoreboard__pill--${player.color}`;
+    const dot = document.createElement('span');
+    dot.className = 'pill__dot';
+    const name = document.createElement('span');
+    name.textContent = player.color.charAt(0).toUpperCase() + player.color.slice(1);
+    const score = document.createElement('span');
+    score.className = 'pill__score';
+    score.textContent = String(player.score);
+    div.append(dot, name, score);
     return div;
   }
 
-  private createTurnIndicator(state: GameState): HTMLElement {
-    const span = document.createElement('span');
-    span.className = 'turn-indicator';
-    const p = state.players[state.currentPlayerIndex];
-    span.textContent = `Player ${p.id}'s turn`;
-    span.style.color = `var(--color-${p.color})`;
-    return span;
+  private buildCurrentPlayer(state: GameState): HTMLElement {
+    const div = document.createElement('div');
+    div.className = 'scoreboard__current';
+    const label = document.createElement('span');
+    label.textContent = 'Current player:';
+    const dot = document.createElement('span');
+    const color = state.players[state.currentPlayerIndex].color;
+    dot.className = `current__dot current__dot--${color}`;
+    div.append(label, dot);
+    return div;
   }
 
-  private createExitButton(): HTMLElement {
+  private buildExitBtn(): HTMLElement {
     const btn = document.createElement('button');
     btn.className = 'exit-btn';
-    btn.textContent = 'Exit Game';
+    const icon = document.createElement('img');
+    icon.src = exitIconImg;
+    icon.className = 'exit-btn__icon';
+    icon.alt = '';
+    const label = document.createElement('span');
+    label.textContent = 'Exit game';
+    btn.append(icon, label);
     btn.addEventListener('click', this.onExit);
     return btn;
   }
