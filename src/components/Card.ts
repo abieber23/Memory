@@ -4,9 +4,10 @@ export function createCardElement(
   card: CardData,
   backImage: string | null,
   onClick: (card: CardData) => void,
+  animate = false,
 ): HTMLElement {
   const el = document.createElement('div');
-  el.className = buildCardClass(card);
+  el.className = buildCardClass(card, animate);
   el.dataset['id'] = String(card.id);
   el.appendChild(createCardInner(card.symbol, backImage));
   if (!card.isFlipped && !card.isMatched) {
@@ -15,10 +16,11 @@ export function createCardElement(
   return el;
 }
 
-function buildCardClass(card: CardData): string {
+function buildCardClass(card: CardData, animate: boolean): string {
   const flipped = card.isFlipped ? ' card--flipped' : '';
   const matched = card.isMatched ? ' card--matched' : '';
-  return `card${flipped}${matched}`;
+  const noAnim = (card.isFlipped || card.isMatched) && !animate ? ' card--no-animate' : '';
+  return `card${flipped}${matched}${noAnim}`;
 }
 
 function createCardInner(symbol: string, backImage: string | null): HTMLElement {

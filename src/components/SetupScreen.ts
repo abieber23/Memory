@@ -3,8 +3,8 @@ import previewCodeVibes from '../img/Preview_img_codevibes.png';
 import previewGaming from '../img/Preview_img_gamingtheme.png';
 
 const THEME_OPTIONS = [
-  { value: 'ocean' as ThemeName, label: 'Code vibes theme', preview: previewCodeVibes },
-  { value: 'forest' as ThemeName, label: 'Gaming theme', preview: previewGaming },
+  { value: 'coding' as ThemeName, label: 'Code vibes theme', preview: previewCodeVibes },
+  { value: 'gaming' as ThemeName, label: 'Gaming theme', preview: previewGaming },
 ];
 
 const SIZE_OPTIONS: { value: BoardSize; label: string }[] = [
@@ -25,7 +25,7 @@ export class SetupScreen {
     player1Color: 'blue',
     player2Color: 'orange',
     boardSize: '4x4',
-    theme: 'ocean',
+    theme: 'coding',
   };
 
   constructor(container: HTMLElement, onStart: (config: GameConfig) => void) {

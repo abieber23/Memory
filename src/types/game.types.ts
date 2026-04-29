@@ -1,6 +1,6 @@
 export type PlayerColor = 'blue' | 'orange';
 export type BoardSize = '4x4' | '4x6' | '6x6';
-export type ThemeName = 'ocean' | 'forest';
+export type ThemeName = 'coding' | 'gaming';
 
 export interface Player {
   id: 1 | 2;

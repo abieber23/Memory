@@ -13,6 +13,7 @@ export class GameBoard {
   private state: GameState;
   private scoreBoard: ScoreBoard;
   private onExit: () => void;
+  private lastFlippedId: number | null = null;
 
   constructor(container: HTMLElement, config: GameConfig, onExit: () => void) {
     this.container = container;
@@ -55,7 +56,8 @@ export class GameBoard {
     grid.style.setProperty('--grid-cols', String(cols));
     const backImage = getTheme(this.config.theme).cardBackImage ?? null;
     this.state.cards.forEach(card => {
-      grid.appendChild(createCardElement(card, backImage, c => this.handleClick(c)));
+      const animate = card.id === this.lastFlippedId;
+      grid.appendChild(createCardElement(card, backImage, c => this.handleClick(c), animate));
     });
     return grid;
   }
@@ -64,8 +66,10 @@ export class GameBoard {
     if (this.state.isLocked || this.state.flippedCards.length >= 2) return;
     const current = this.state.cards.find(c => c.id === card.id);
     if (!current || current.isFlipped || current.isMatched) return;
+    this.lastFlippedId = card.id;
     this.state = flipCard(this.state, card.id);
     this.render();
+    this.lastFlippedId = null;
     if (this.state.flippedCards.length === 2) this.evaluate();
   }
 
@@ -76,8 +80,10 @@ export class GameBoard {
 
   private onMatch(): void {
     this.state = markMatched(this.state);
-    this.render();
-    if (isGameOver(this.state)) setTimeout(() => this.showGameOver(), 600);
+    setTimeout(() => {
+      this.render();
+      if (isGameOver(this.state)) setTimeout(() => this.showGameOver(), 600);
+    }, 650);
   }
 
   private onMismatch(): void {

@@ -42,8 +42,8 @@ export class ExitConfirmModal {
   private buildButtons(): HTMLElement {
     const div = document.createElement('div');
     div.className = 'exit-modal__buttons';
-    const backLabel = this.theme === 'forest' ? 'No, back to game' : 'Back to game';
-    const exitLabel = this.theme === 'forest' ? 'Yes, quit game' : 'Exit game';
+    const backLabel = this.theme === 'gaming' ? 'No, back to game' : 'Back to game';
+    const exitLabel = this.theme === 'gaming' ? 'Yes, quit game' : 'Exit game';
     div.appendChild(this.buildBtn(backLabel, 'exit-modal__btn exit-modal__btn--solid', () => {
       this.dismiss();
       this.onBack();

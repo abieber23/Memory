@@ -27,7 +27,7 @@ export class WinnerScreen {
   private buildScreen(): HTMLElement {
     const screen = document.createElement('div');
     screen.className = `winner-screen winner-screen--${this.theme.name}`;
-    if (this.theme.name === 'ocean') screen.appendChild(this.buildConfetti());
+    if (this.theme.name === 'coding') screen.appendChild(this.buildConfetti());
     screen.appendChild(this.buildContent());
     return screen;
   }
@@ -70,7 +70,7 @@ export class WinnerScreen {
     label.textContent = 'The winner is';
     const name = document.createElement('p');
     name.className = `winner-screen__name winner-screen__name--${winner?.color ?? 'blue'}`;
-    if (this.theme.name === 'forest') {
+    if (this.theme.name === 'gaming') {
       name.textContent = winner
         ? `${winner.color.charAt(0).toUpperCase() + winner.color.slice(1)} Player`
         : "It's a tie!";
@@ -84,7 +84,7 @@ export class WinnerScreen {
   private buildIcon(): HTMLElement {
     const winner = getWinner(this.state);
     const img = document.createElement('img');
-    img.src = this.theme.name === 'forest'
+    img.src = this.theme.name === 'gaming'
       ? winnerTrophy
       : winner?.color === 'orange' ? winnerOrange : winnerBlue;
     img.className = 'winner-screen__icon';
@@ -95,7 +95,7 @@ export class WinnerScreen {
   private buildBtn(): HTMLElement {
     const btn = document.createElement('button');
     btn.className = 'winner-screen__btn';
-    btn.textContent = this.theme.name === 'forest' ? 'Home' : 'Back to start';
+    btn.textContent = this.theme.name === 'gaming' ? 'Home' : 'Back to start';
     btn.addEventListener('click', this.onExit);
     return btn;
   }
