@@ -25,11 +25,17 @@ export interface ThemeColors {
   accent: string;
 }
 
+export interface PlayerIcons {
+  blue: string;
+  orange: string;
+}
+
 export interface Theme {
   name: ThemeName;
   label: string;
   symbols: string[];
   cardBackImage?: string;
+  playerIcons?: PlayerIcons;
   colors: ThemeColors;
 }
 

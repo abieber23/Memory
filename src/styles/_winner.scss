@@ -1,0 +1,95 @@
+.winner-screen {
+  position: relative;
+  min-height: 100vh;
+  background: var(--color-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Red Rose', system-ui, sans-serif;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.confetti__piece {
+  position: absolute;
+  border-radius: 2px;
+  animation: confetti-drift linear infinite;
+}
+
+@keyframes confetti-drift {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(220px) rotate(200deg); opacity: 0; }
+}
+
+.winner-screen__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.winner-screen__label {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0;
+  text-align: center;
+}
+
+.winner-screen__name {
+  font-size: 2.6rem;
+  font-weight: 900;
+  margin: 0;
+  letter-spacing: 0.04em;
+  text-align: center;
+
+  &--blue   { color: var(--color-blue); }
+  &--orange { color: var(--color-orange); }
+}
+
+.winner-screen__icon {
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+}
+
+.winner-screen__btn {
+  margin-top: 0.5rem;
+  padding: 0.6rem 1.6rem;
+  background: #2a3f3f;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: 'Red Rose', system-ui, sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover { background: #35504f; }
+}
+
+.winner-screen--forest {
+  .winner-screen__icon { width: 200px; height: 200px; }
+
+  .winner-screen__name {
+    font-size: 2.8rem;
+    &--blue   { color: var(--color-blue); }
+    &--orange { color: var(--color-orange); }
+  }
+
+  .winner-screen__btn {
+    background: transparent;
+    border: 2px solid #e0108a;
+    color: #fff;
+    &:hover { background: rgba(224, 16, 138, 0.12); }
+  }
+}

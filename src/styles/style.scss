@@ -4,6 +4,9 @@
 @use 'game';
 @use 'card';
 @use 'modal';
+@use 'exit-confirm';
+@use 'game-over';
+@use 'winner';
 
 *,
 *::before,

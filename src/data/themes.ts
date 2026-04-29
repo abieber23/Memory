@@ -1,6 +1,8 @@
 import type { Theme, ThemeName } from '../types/game.types';
 import codingBackImg from '../img/CodingVibeTheme/Coding_front.png';
 import gamingBackImg from '../img/GamingTheme/Gaming_front.png';
+import playerBlueImg from '../img/GamingTheme/Game_theme_player_blue.png';
+import playerOrangeImg from '../img/GamingTheme/Game_theme_player_orange.png';
 
 const rawCodingCards = import.meta.glob<string>(
   '../img/CodingVibeTheme/Coding_Card_*.png',
@@ -41,6 +43,7 @@ export const THEMES: Record<ThemeName, Theme> = {
     label: 'Gaming theme',
     symbols: sortedSymbols(rawGamingCards, 'Gaming_Card'),
     cardBackImage: gamingBackImg,
+    playerIcons: { blue: playerBlueImg, orange: playerOrangeImg },
     colors: {
       primary: '#b040a0',
       secondary: '#d060c0',

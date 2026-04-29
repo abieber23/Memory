@@ -1,0 +1,126 @@
+.game-over-screen {
+  min-height: 100vh;
+  background: var(--color-background);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  font-family: 'Red Rose', system-ui, sans-serif;
+}
+
+.game-over__title {
+  font-size: 9rem;
+  font-weight: 900;
+  color: #29b8b0;
+  text-shadow:
+    3px 3px 0 #1f8e87,
+    6px 6px 0 #176661,
+    9px 9px 0 #0e3e3b,
+    12px 12px 0 rgba(0, 0, 0, 0.25);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.game-over__scores {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.game-over__label {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.game-over__pills {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.game-over__pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1rem;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+
+  &--blue   .game-over__dot { background: var(--color-blue); }
+  &--orange .game-over__dot { background: var(--color-orange); }
+}
+
+.game-over__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.game-over__pill-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.game-over-screen--forest {
+  .game-over__title {
+    color: #e0108a;
+    text-shadow: none;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .game-over__label { color: rgba(255, 255, 255, 0.7); }
+
+  .game-over__pill {
+    background: rgba(255, 255, 255, 0.88);
+    gap: 0.5rem;
+
+    &--blue   .game-over__pill-score { color: var(--color-blue); }
+    &--orange .game-over__pill-score { color: var(--color-orange); }
+  }
+
+  .game-over__pill-score {
+    font-weight: 800;
+    font-size: 1.05rem;
+  }
+}
+
+.game-over__buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.game-over__btn {
+  padding: 0.75rem 2rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Red Rose', system-ui, sans-serif;
+  transition: background 0.2s, transform 0.15s;
+
+  &:hover { transform: translateY(-2px); }
+  &:active { transform: translateY(0); }
+
+  &--primary {
+    background: #29b8b0;
+    color: #fff;
+    border: 2px solid #29b8b0;
+    &:hover { background: #22a09a; }
+  }
+
+  &--secondary {
+    background: transparent;
+    color: #29b8b0;
+    border: 2px solid #29b8b0;
+    &:hover { background: rgba(41, 184, 176, 0.1); }
+  }
+}

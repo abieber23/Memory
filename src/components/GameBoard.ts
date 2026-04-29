@@ -1,7 +1,8 @@
 import type { CardData, GameConfig, GameState } from '../types/game.types';
 import { createCardElement } from './Card';
 import { ScoreBoard } from './ScoreBoard';
-import { GameOverModal } from './GameOverModal';
+import { GameOverScreen } from './GameOverScreen';
+import { WinnerScreen } from './WinnerScreen';
 import { createInitialState, flipCard, markMatched, unflipCards, isGameOver } from '../services/GameState';
 import { getBoardDimensions, checkMatch } from '../services/CardLogic';
 import { getTheme } from '../data/themes';
@@ -18,7 +19,7 @@ export class GameBoard {
     this.config = config;
     this.onExit = onExit;
     this.state = createInitialState(config);
-    this.scoreBoard = new ScoreBoard(this.appendDiv(), onExit);
+    this.scoreBoard = new ScoreBoard(this.appendDiv(), getTheme(config.theme), onExit);
     this.applyTheme();
     this.render();
   }
@@ -88,9 +89,10 @@ export class GameBoard {
   }
 
   private showGameOver(): void {
-    new GameOverModal(this.container, this.state, this.onExit, () => {
-      this.state = createInitialState(this.config);
-      this.render();
+    const theme = getTheme(this.config.theme);
+    const state = this.state;
+    new GameOverScreen(this.container, state, theme, () => {
+      new WinnerScreen(this.container, state, theme, this.onExit).show();
     }).show();
   }
 }

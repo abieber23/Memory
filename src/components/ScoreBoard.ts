@@ -1,12 +1,15 @@
-import type { GameState, Player } from '../types/game.types';
+import type { GameState, Player, Theme } from '../types/game.types';
 import exitIconImg from '../img/Exit_Icon.png';
+import { ExitConfirmModal } from './ExitConfirmModal';
 
 export class ScoreBoard {
   private container: HTMLElement;
+  private theme: Theme;
   private onExit: () => void;
 
-  constructor(container: HTMLElement, onExit: () => void) {
+  constructor(container: HTMLElement, theme: Theme, onExit: () => void) {
     this.container = container;
+    this.theme = theme;
     this.onExit = onExit;
   }
 
@@ -28,15 +31,28 @@ export class ScoreBoard {
   private buildPill(player: Player): HTMLElement {
     const div = document.createElement('div');
     div.className = `scoreboard__pill scoreboard__pill--${player.color}`;
-    const dot = document.createElement('span');
-    dot.className = 'pill__dot';
-    const name = document.createElement('span');
-    name.textContent = player.color.charAt(0).toUpperCase() + player.color.slice(1);
+    div.appendChild(this.buildPlayerIcon(player.color));
     const score = document.createElement('span');
     score.className = 'pill__score';
     score.textContent = String(player.score);
-    div.append(dot, name, score);
+    div.appendChild(score);
     return div;
+  }
+
+  private buildPlayerIcon(color: 'blue' | 'orange'): HTMLElement {
+    const icons = this.theme.playerIcons;
+    if (icons) return this.buildIconImg(icons[color]);
+    const dot = document.createElement('span');
+    dot.className = `pill__dot pill__dot--${color}`;
+    return dot;
+  }
+
+  private buildIconImg(src: string): HTMLElement {
+    const img = document.createElement('img');
+    img.src = src;
+    img.className = 'player-icon';
+    img.alt = '';
+    return img;
   }
 
   private buildCurrentPlayer(state: GameState): HTMLElement {
@@ -44,11 +60,17 @@ export class ScoreBoard {
     div.className = 'scoreboard__current';
     const label = document.createElement('span');
     label.textContent = 'Current player:';
-    const dot = document.createElement('span');
     const color = state.players[state.currentPlayerIndex].color;
-    dot.className = `current__dot current__dot--${color}`;
-    div.append(label, dot);
+    div.append(label, this.buildCurrentIcon(color));
     return div;
+  }
+
+  private buildCurrentIcon(color: 'blue' | 'orange'): HTMLElement {
+    const icons = this.theme.playerIcons;
+    if (icons) return this.buildIconImg(icons[color]);
+    const dot = document.createElement('span');
+    dot.className = `current__dot current__dot--${color}`;
+    return dot;
   }
 
   private buildExitBtn(): HTMLElement {
@@ -61,7 +83,11 @@ export class ScoreBoard {
     const label = document.createElement('span');
     label.textContent = 'Exit game';
     btn.append(icon, label);
-    btn.addEventListener('click', this.onExit);
+    btn.addEventListener('click', () => this.showExitConfirm());
     return btn;
+  }
+
+  private showExitConfirm(): void {
+    new ExitConfirmModal(this.theme.name, () => {}, this.onExit).show();
   }
 }
