@@ -6,12 +6,23 @@ import winnerTrophy from '../img/GamingTheme/Game_Theme_Winner.png';
 
 const CONFETTI_COLORS = ['#e74c3c', '#3498db', '#f1c40f', '#2ecc71', '#e67e22'];
 
+/**
+ * Full-page winner screen shown after the game-over transition.
+ * The coding theme displays confetti and a player-specific image;
+ * the gaming theme shows a shared trophy image.
+ */
 export class WinnerScreen {
   private container: HTMLElement;
   private state: GameState;
   private theme: Theme;
   private onExit: () => void;
 
+  /**
+   * @param container - Element to render into (its contents will be replaced).
+   * @param state - Final game state used to determine and display the winner.
+   * @param theme - Active theme; controls layout, imagery and button label.
+   * @param onExit - Called when the player clicks the "Home" / "Back to start" button.
+   */
   constructor(container: HTMLElement, state: GameState, theme: Theme, onExit: () => void) {
     this.container = container;
     this.state = state;
@@ -19,11 +30,13 @@ export class WinnerScreen {
     this.onExit = onExit;
   }
 
+  /** Renders the winner screen, replacing the container's current content. */
   show(): void {
     this.container.innerHTML = '';
     this.container.appendChild(this.buildScreen());
   }
 
+  /** Builds the root screen element, adding confetti for the coding theme. */
   private buildScreen(): HTMLElement {
     const screen = document.createElement('div');
     screen.className = `winner-screen winner-screen--${this.theme.name}`;
@@ -32,6 +45,7 @@ export class WinnerScreen {
     return screen;
   }
 
+  /** Creates the confetti container populated with randomly positioned pieces. */
   private buildConfetti(): HTMLElement {
     const div = document.createElement('div');
     div.className = 'confetti';
@@ -39,6 +53,7 @@ export class WinnerScreen {
     return div;
   }
 
+  /** Creates a single confetti piece with randomised position, size, colour and timing. */
   private buildPiece(): HTMLElement {
     const el = document.createElement('div');
     el.className = 'confetti__piece';
@@ -53,6 +68,7 @@ export class WinnerScreen {
     return el;
   }
 
+  /** Creates the centred content block with winner text, icon and button. */
   private buildContent(): HTMLElement {
     const div = document.createElement('div');
     div.className = 'winner-screen__content';
@@ -62,6 +78,7 @@ export class WinnerScreen {
     return div;
   }
 
+  /** Creates the "The winner is" label and the coloured winner-name paragraph. */
   private buildText(): HTMLElement {
     const winner = getWinner(this.state);
     const div = document.createElement('div');
@@ -81,6 +98,10 @@ export class WinnerScreen {
     return div;
   }
 
+  /**
+   * Creates the winner image element.
+   * Gaming theme always uses the shared trophy; coding theme uses a player-specific image.
+   */
   private buildIcon(): HTMLElement {
     const winner = getWinner(this.state);
     const img = document.createElement('img');
@@ -92,6 +113,7 @@ export class WinnerScreen {
     return img;
   }
 
+  /** Creates the navigation button that returns the player to the start screen. */
   private buildBtn(): HTMLElement {
     const btn = document.createElement('button');
     btn.className = 'winner-screen__btn';

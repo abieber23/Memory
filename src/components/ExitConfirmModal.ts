@@ -1,17 +1,27 @@
 import type { ThemeName } from '../types/game.types';
 
+/**
+ * Modal dialog that asks the player to confirm they want to quit.
+ * Styling adapts to the active theme (teal for coding, pink for gaming).
+ */
 export class ExitConfirmModal {
   private theme: ThemeName;
   private onBack: () => void;
   private onConfirm: () => void;
   private overlay: HTMLElement | null = null;
 
+  /**
+   * @param theme - Active theme name; determines button colours and label text.
+   * @param onBack - Called when the player chooses to continue playing.
+   * @param onConfirm - Called when the player confirms they want to exit.
+   */
   constructor(theme: ThemeName, onBack: () => void, onConfirm: () => void) {
     this.theme = theme;
     this.onBack = onBack;
     this.onConfirm = onConfirm;
   }
 
+  /** Appends the modal overlay to `document.body` and displays it. */
   show(): void {
     this.overlay = document.createElement('div');
     this.overlay.className = 'exit-modal-overlay';
@@ -19,11 +29,13 @@ export class ExitConfirmModal {
     document.body.appendChild(this.overlay);
   }
 
+  /** Removes the overlay from the DOM. */
   private dismiss(): void {
     this.overlay?.remove();
     this.overlay = null;
   }
 
+  /** Builds the modal card element containing the prompt and action buttons. */
   private buildModal(): HTMLElement {
     const modal = document.createElement('div');
     modal.className = `exit-modal exit-modal--${this.theme}`;
@@ -32,6 +44,7 @@ export class ExitConfirmModal {
     return modal;
   }
 
+  /** Creates the confirmation question paragraph. */
   private buildTitle(): HTMLElement {
     const p = document.createElement('p');
     p.className = 'exit-modal__title';
@@ -39,6 +52,7 @@ export class ExitConfirmModal {
     return p;
   }
 
+  /** Creates the button group with theme-appropriate labels. */
   private buildButtons(): HTMLElement {
     const div = document.createElement('div');
     div.className = 'exit-modal__buttons';
@@ -55,6 +69,12 @@ export class ExitConfirmModal {
     return div;
   }
 
+  /**
+   * Creates a single button element.
+   * @param text - Button label.
+   * @param cls - CSS class string to apply.
+   * @param handler - Click handler.
+   */
   private buildBtn(text: string, cls: string, handler: () => void): HTMLElement {
     const btn = document.createElement('button');
     btn.textContent = text;

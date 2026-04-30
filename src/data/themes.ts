@@ -14,6 +14,12 @@ const rawGamingCards = import.meta.glob<string>(
   { eager: true, query: '?url', import: 'default' },
 );
 
+/**
+ * Sorts glob-imported image records by the trailing number in their filename
+ * and returns the resolved URLs in ascending order.
+ * @param raw - Record of file paths to resolved URLs from import.meta.glob.
+ * @param prefix - Filename prefix used to extract the numeric index (e.g. "Coding_Card").
+ */
 function sortedSymbols(raw: Record<string, string>, prefix: string): string[] {
   return Object.entries(raw)
     .sort(([a], [b]) => {
@@ -23,9 +29,10 @@ function sortedSymbols(raw: Record<string, string>, prefix: string): string[] {
     .map(([, url]) => url);
 }
 
+/** All available themes keyed by their ThemeName. */
 export const THEMES: Record<ThemeName, Theme> = {
-  ocean: {
-    name: 'ocean',
+  coding: {
+    name: 'coding',
     label: 'Code vibes theme',
     symbols: sortedSymbols(rawCodingCards, 'Coding_Card'),
     cardBackImage: codingBackImg,
@@ -38,8 +45,8 @@ export const THEMES: Record<ThemeName, Theme> = {
       accent: '#29b8b0',
     },
   },
-  forest: {
-    name: 'forest',
+  gaming: {
+    name: 'gaming',
     label: 'Gaming theme',
     symbols: sortedSymbols(rawGamingCards, 'Gaming_Card'),
     cardBackImage: gamingBackImg,
@@ -55,6 +62,7 @@ export const THEMES: Record<ThemeName, Theme> = {
   },
 };
 
+/** Looks up and returns the Theme object for the given theme name. */
 export function getTheme(name: ThemeName): Theme {
   return THEMES[name];
 }

@@ -1,11 +1,21 @@
 import type { GameState, Player, Theme } from '../types/game.types';
 
+/**
+ * Full-page "Game over" screen shown immediately after the last pair is matched.
+ * Displays the final scores and automatically calls `onComplete` after 3 seconds.
+ */
 export class GameOverScreen {
   private container: HTMLElement;
   private state: GameState;
   private theme: Theme;
   private onComplete: () => void;
 
+  /**
+   * @param container - Element to render into (its contents will be replaced).
+   * @param state - Final game state used to display scores.
+   * @param theme - Active theme; controls title style and pill icon type.
+   * @param onComplete - Called automatically after the 3-second display period.
+   */
   constructor(container: HTMLElement, state: GameState, theme: Theme, onComplete: () => void) {
     this.container = container;
     this.state = state;
@@ -13,12 +23,14 @@ export class GameOverScreen {
     this.onComplete = onComplete;
   }
 
+  /** Renders the screen and schedules the transition to the winner screen. */
   show(): void {
     this.container.innerHTML = '';
     this.container.appendChild(this.buildScreen());
     setTimeout(() => this.onComplete(), 3000);
   }
 
+  /** Builds the root screen element with title and score section. */
   private buildScreen(): HTMLElement {
     const screen = document.createElement('div');
     screen.className = `game-over-screen game-over-screen--${this.theme.name}`;
@@ -27,6 +39,7 @@ export class GameOverScreen {
     return screen;
   }
 
+  /** Creates the "Game over" heading element. */
   private buildTitle(): HTMLElement {
     const h1 = document.createElement('h1');
     h1.className = 'game-over__title';
@@ -34,6 +47,7 @@ export class GameOverScreen {
     return h1;
   }
 
+  /** Creates the score section containing the "Final score" label and player pills. */
   private buildScoreSection(): HTMLElement {
     const div = document.createElement('div');
     div.className = 'game-over__scores';
@@ -45,6 +59,7 @@ export class GameOverScreen {
     return div;
   }
 
+  /** Creates the row of score pills for all players. */
   private buildPills(): HTMLElement {
     const div = document.createElement('div');
     div.className = 'game-over__pills';
@@ -52,6 +67,7 @@ export class GameOverScreen {
     return div;
   }
 
+  /** Creates a single score pill for the given player. */
   private buildPill(player: Player): HTMLElement {
     const pill = document.createElement('div');
     pill.className = `game-over__pill game-over__pill--${player.color}`;
@@ -65,6 +81,10 @@ export class GameOverScreen {
     return pill;
   }
 
+  /**
+   * Returns the icon for a pill — a player icon `<img>` when the theme provides them,
+   * otherwise a coloured dot `<span>`.
+   */
   private buildPillIcon(color: 'blue' | 'orange'): HTMLElement {
     const icons = this.theme.playerIcons;
     if (icons) {

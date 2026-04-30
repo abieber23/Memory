@@ -1,16 +1,22 @@
 import controllerImg from '../img/stadia_controller.png';
 import controllerSmall from '../img/stadia_controller_small.png';
 
+/** Renders the initial landing screen with the "Ready to play?" headline and play button. */
 export class StartScreen {
   private container: HTMLElement;
   private onPlay: () => void;
 
+  /**
+   * @param container - The element to render into.
+   * @param onPlay - Called when the player clicks the play button.
+   */
   constructor(container: HTMLElement, onPlay: () => void) {
     this.container = container;
     this.onPlay = onPlay;
     this.render();
   }
 
+  /** Clears the container and builds the full start-screen DOM. */
   private render(): void {
     this.container.className = 'start-screen';
     this.container.innerHTML = '';
@@ -18,6 +24,7 @@ export class StartScreen {
     this.container.appendChild(this.buildContent());
   }
 
+  /** Creates the decorative background watermark image. */
   private buildWatermark(): HTMLElement {
     const img = document.createElement('img');
     img.src = controllerImg;
@@ -27,6 +34,7 @@ export class StartScreen {
     return img;
   }
 
+  /** Creates the centred content block containing the eyebrow, headline and button. */
   private buildContent(): HTMLElement {
     const div = document.createElement('div');
     div.className = 'start-screen__content';
@@ -36,6 +44,7 @@ export class StartScreen {
     return div;
   }
 
+  /** Creates the small eyebrow text above the headline. */
   private buildEyebrow(): HTMLElement {
     const p = document.createElement('p');
     p.className = 'start-screen__eyebrow';
@@ -43,6 +52,7 @@ export class StartScreen {
     return p;
   }
 
+  /** Creates the main "Ready to play?" heading. */
   private buildHeadline(): HTMLElement {
     const h1 = document.createElement('h1');
     h1.className = 'start-screen__headline';
@@ -50,6 +60,7 @@ export class StartScreen {
     return h1;
   }
 
+  /** Creates the play button with controller icon and arrow. */
   private buildPlayButton(): HTMLElement {
     const btn = document.createElement('button');
     btn.className = 'start-screen__play-btn';

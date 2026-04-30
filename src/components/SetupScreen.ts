@@ -2,9 +2,9 @@ import type { BoardSize, GameConfig, PlayerColor, ThemeName } from '../types/gam
 import previewCodeVibes from '../img/Preview_img_codevibes.png';
 import previewGaming from '../img/Preview_img_gamingtheme.png';
 
-const THEME_OPTIONS = [
-  { value: 'coding' as ThemeName, label: 'Code vibes theme', preview: previewCodeVibes },
-  { value: 'gaming' as ThemeName, label: 'Gaming theme', preview: previewGaming },
+const THEME_OPTIONS: Array<{ value: ThemeName; label: string; preview: string }> = [
+  { value: 'coding', label: 'Code vibes theme', preview: previewCodeVibes },
+  { value: 'gaming', label: 'Gaming theme', preview: previewGaming },
 ];
 
 const SIZE_OPTIONS: { value: BoardSize; label: string }[] = [
@@ -18,6 +18,10 @@ const PLAYER_OPTIONS: { value: PlayerColor; label: string }[] = [
   { value: 'orange', label: 'Orange' },
 ];
 
+/**
+ * Settings screen where players configure theme, player colour and board size
+ * before starting a game.
+ */
 export class SetupScreen {
   private container: HTMLElement;
   private onStart: (config: GameConfig) => void;
@@ -28,12 +32,17 @@ export class SetupScreen {
     theme: 'coding',
   };
 
+  /**
+   * @param container - Element to render the setup screen into.
+   * @param onStart - Called with the finalised config when the player clicks Start.
+   */
   constructor(container: HTMLElement, onStart: (config: GameConfig) => void) {
     this.container = container;
     this.onStart = onStart;
     this.render();
   }
 
+  /** Clears the container and rebuilds the full setup screen DOM. */
   private render(): void {
     this.container.innerHTML = '';
     this.container.className = 'setup-screen';
@@ -41,6 +50,7 @@ export class SetupScreen {
     this.container.appendChild(this.buildBody());
   }
 
+  /** Creates the "Settings" page header. */
   private buildHeader(): HTMLElement {
     const header = document.createElement('header');
     header.className = 'setup__header';
@@ -53,6 +63,7 @@ export class SetupScreen {
     return header;
   }
 
+  /** Creates the two-column body layout containing the options and preview. */
   private buildBody(): HTMLElement {
     const body = document.createElement('div');
     body.className = 'setup__body';
@@ -61,6 +72,7 @@ export class SetupScreen {
     return body;
   }
 
+  /** Creates the right column with the theme preview image and footer. */
   private buildRight(): HTMLElement {
     const right = document.createElement('div');
     right.className = 'setup__right';
@@ -69,6 +81,7 @@ export class SetupScreen {
     return right;
   }
 
+  /** Creates the left column containing the three option sections. */
   private buildLeft(): HTMLElement {
     const left = document.createElement('div');
     left.className = 'setup__left';
@@ -78,6 +91,7 @@ export class SetupScreen {
     return left;
   }
 
+  /** Creates the theme selection section with one radio per available theme. */
   private buildThemeSection(): HTMLElement {
     const section = this.buildSection('Game themes', '🎨', 'blue');
     THEME_OPTIONS.forEach(opt => {
@@ -90,6 +104,10 @@ export class SetupScreen {
     return section;
   }
 
+  /**
+   * Creates the player-colour section.
+   * Selecting a colour for player 1 automatically assigns the opposite to player 2.
+   */
   private buildPlayerSection(): HTMLElement {
     const section = this.buildSection('Choose player', '🧑', 'purple');
     PLAYER_OPTIONS.forEach(opt => {
@@ -106,6 +124,7 @@ export class SetupScreen {
     return section;
   }
 
+  /** Creates the board-size selection section with one radio per size option. */
   private buildSizeSection(): HTMLElement {
     const section = this.buildSection('Board size', '🃏', 'teal');
     SIZE_OPTIONS.forEach(opt => {
@@ -118,6 +137,12 @@ export class SetupScreen {
     return section;
   }
 
+  /**
+   * Creates a labelled section container.
+   * @param title - Section heading text.
+   * @param icon - Emoji displayed next to the title.
+   * @param color - BEM modifier used to apply the accent colour.
+   */
   private buildSection(title: string, icon: string, color: string): HTMLElement {
     const section = document.createElement('section');
     section.className = `setup__section setup__section--${color}`;
@@ -128,6 +153,12 @@ export class SetupScreen {
     return section;
   }
 
+  /**
+   * Creates a single radio-style option row.
+   * @param label - Display text for the option.
+   * @param checked - Whether this option is currently selected.
+   * @param onClick - Called when the row is clicked.
+   */
   private buildRadio(label: string, checked: boolean, onClick: () => void): HTMLElement {
     const div = document.createElement('div');
     div.className = `setup__radio${checked ? ' setup__radio--checked' : ''}`;
@@ -147,6 +178,7 @@ export class SetupScreen {
     return div;
   }
 
+  /** Creates the theme preview image that updates when a different theme is selected. */
   private buildPreview(): HTMLElement {
     const div = document.createElement('div');
     div.className = 'setup__preview';
@@ -158,6 +190,7 @@ export class SetupScreen {
     return div;
   }
 
+  /** Creates the footer row containing the config summary and the Start button. */
   private buildFooter(): HTMLElement {
     const footer = document.createElement('footer');
     footer.className = 'setup__footer';
@@ -166,6 +199,7 @@ export class SetupScreen {
     return footer;
   }
 
+  /** Creates the summary line that lists the currently selected theme, player and board size. */
   private buildSummary(): HTMLElement {
     const div = document.createElement('div');
     div.className = 'setup__summary';
@@ -176,6 +210,7 @@ export class SetupScreen {
     return div;
   }
 
+  /** Returns the three human-readable labels for the current configuration choices. */
   private getSummaryLabels(): string[] {
     return [
       THEME_OPTIONS.find(t => t.value === this.config.theme)?.label ?? '',
@@ -184,12 +219,14 @@ export class SetupScreen {
     ];
   }
 
+  /** Creates a single text span for the summary line. */
   private buildSummaryItem(text: string): HTMLElement {
     const span = document.createElement('span');
     span.textContent = text;
     return span;
   }
 
+  /** Creates the "/" separator span used between summary items. */
   private buildSummarySep(): HTMLElement {
     const sep = document.createElement('span');
     sep.className = 'summary__sep';
@@ -197,6 +234,7 @@ export class SetupScreen {
     return sep;
   }
 
+  /** Creates the Start button that submits the current configuration. */
   private buildStartBtn(): HTMLElement {
     const btn = document.createElement('button');
     btn.className = 'setup__start-btn';
