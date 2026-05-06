@@ -1,6 +1,10 @@
 import type { GameState } from '../types/game.types';
 import { getWinner } from '../services/GameState';
 
+/**
+ * Modal dialog shown at the end of a game, displaying the winner (or a tie)
+ * and the final scores for all players. Offers buttons to start a new game or exit.
+ */
 export class GameOverModal {
   private container: HTMLElement;
   private state: GameState;
@@ -8,6 +12,12 @@ export class GameOverModal {
   private onRestart: () => void;
   private overlay: HTMLElement | null = null;
 
+  /**
+   * @param container - Element the modal overlay will be appended to.
+   * @param state - Final game state used to determine the winner and display scores.
+   * @param onExit - Called when the player clicks "Exit".
+   * @param onRestart - Called when the player clicks "New Game" (overlay is removed first).
+   */
   constructor(container: HTMLElement, state: GameState, onExit: () => void, onRestart: () => void) {
     this.container = container;
     this.state = state;
@@ -15,6 +25,7 @@ export class GameOverModal {
     this.onRestart = onRestart;
   }
 
+  /** Renders the modal overlay and appends it to the container. */
   show(): void {
     this.overlay = document.createElement('div');
     this.overlay.className = 'modal-overlay';
@@ -22,6 +33,7 @@ export class GameOverModal {
     this.container.appendChild(this.overlay);
   }
 
+  /** Builds the modal card containing title, scores and action buttons. */
   private buildModal(): HTMLElement {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -31,6 +43,7 @@ export class GameOverModal {
     return modal;
   }
 
+  /** Creates the heading showing the winner's name or a tie message. */
   private buildTitle(): HTMLElement {
     const winner = getWinner(this.state);
     const h2 = document.createElement('h2');
@@ -39,6 +52,7 @@ export class GameOverModal {
     return h2;
   }
 
+  /** Creates the score list with one row per player. */
   private buildScores(): HTMLElement {
     const div = document.createElement('div');
     div.className = 'modal__scores';
@@ -51,6 +65,7 @@ export class GameOverModal {
     return div;
   }
 
+  /** Creates the button row with "New Game" and "Exit" actions. */
   private buildButtons(): HTMLElement {
     const div = document.createElement('div');
     div.className = 'modal__buttons';
@@ -62,6 +77,12 @@ export class GameOverModal {
     return div;
   }
 
+  /**
+   * Creates a single button element.
+   * @param text - Button label.
+   * @param cls - CSS class string applied to the button.
+   * @param handler - Click event handler.
+   */
   private buildBtn(text: string, cls: string, handler: () => void): HTMLElement {
     const btn = document.createElement('button');
     btn.textContent = text;

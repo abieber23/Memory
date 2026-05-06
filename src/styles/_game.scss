@@ -7,6 +7,10 @@
   padding: 1.25rem 1.5rem 3rem;
   transition: background 0.4s ease;
   font-family: 'Red Rose', system-ui, sans-serif;
+
+  &[data-theme="gaming"] {
+    font-family: 'Orbitron', sans-serif;
+  }
 }
 
 .scoreboard {
@@ -89,7 +93,7 @@
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 600;
-  font-family: 'Red Rose', system-ui, sans-serif;
+  font-family: inherit;
   transition: background 0.2s;
   white-space: nowrap;
 

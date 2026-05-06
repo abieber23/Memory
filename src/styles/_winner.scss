@@ -1,6 +1,6 @@
 .winner-screen {
   position: relative;
-  min-height: 100vh;
+  min-height: 80vh;
   background: var(--color-background);
   display: flex;
   align-items: center;
@@ -70,7 +70,7 @@
   border-radius: 6px;
   font-size: 0.95rem;
   font-weight: 600;
-  font-family: 'Red Rose', system-ui, sans-serif;
+  font-family: inherit;
   cursor: pointer;
   transition: background 0.2s;
 
@@ -78,6 +78,8 @@
 }
 
 .winner-screen--gaming {
+  font-family: 'Orbitron', sans-serif;
+
   .winner-screen__icon { width: 200px; height: 200px; }
 
   .winner-screen__name {
