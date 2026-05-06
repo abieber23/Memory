@@ -13,6 +13,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .setup__title {
@@ -50,6 +53,9 @@
   gap: 1.5rem;
   align-items: start;
   flex: 1;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .setup__left {
@@ -59,7 +65,7 @@
 }
 
 .setup__section {
-
+  font-family: 'Almarai', system-ui, sans-serif;
   border-radius: 12px;
   padding: 1.9rem 1.9rem;
   display: flex;
@@ -89,13 +95,18 @@
   color: #555;
   font-size: 0.95rem;
   user-select: none;
-  transition: color 0.15s;
+  transition: color 0.15s, padding-left 0.15s;
 
   &:hover { color: #1a1a1a; }
 
+  &--theme:hover {
+    padding-left: 8px;
+    .radio__label { font-weight: 700; }
+  }
+
   &--checked {
     color: #1a1a1a;
-
+    padding-left: 8px;
     .radio__label { font-weight: 700; }
 
     .radio__circle {
@@ -171,12 +182,13 @@
 }
 
 .setup__summary {
+  font-family: 'Almarai', sans-serif;
   display: flex;
   align-items: center;
   gap: 0.6rem;
   flex: 1;
   flex-wrap: wrap;
-  font-size: 0.9rem;
+  font-size: 1.0rem;
   color: #444;
   font-weight: 500;
 }

@@ -14,7 +14,9 @@ export class GameBoard {
   private state: GameState;
   private scoreBoard: ScoreBoard;
   private onExit: () => void;
-  private lastFlippedId: number | null = null;
+  private grid!: HTMLElement;
+  private cardElements = new Map<number, HTMLElement>();
+  private backImage: string | null = null;
 
   /**
    * @param container - Element to render the game into.
@@ -26,9 +28,11 @@ export class GameBoard {
     this.config = config;
     this.onExit = onExit;
     this.state = createInitialState(config);
+    this.backImage = getTheme(config.theme).cardBackImage ?? null;
     this.scoreBoard = new ScoreBoard(this.appendDiv(), getTheme(config.theme), onExit);
     this.applyTheme();
-    this.render();
+    this.buildGrid();
+    this.scoreBoard.update(this.state);
   }
 
   /** Appends a blank div to the container and returns it (used to reserve slots for child components). */
@@ -51,25 +55,30 @@ export class GameBoard {
     this.container.dataset['theme'] = this.config.theme;
   }
 
-  /** Updates the scoreboard and replaces the card grid to reflect the current state. */
-  private render(): void {
-    this.scoreBoard.update(this.state);
-    this.container.querySelector('.game-grid')?.remove();
-    this.container.appendChild(this.buildGrid());
+  /** Builds the card grid once and stores references for targeted updates. */
+  private buildGrid(): void {
+    this.grid = document.createElement('div');
+    this.grid.className = 'game-grid';
+    const [cols] = getBoardDimensions(this.config.boardSize);
+    this.grid.style.setProperty('--grid-cols', String(cols));
+    this.state.cards.forEach(card => {
+      const el = createCardElement(card, this.backImage, c => this.handleClick(c), false);
+      this.cardElements.set(card.id, el);
+      this.grid.appendChild(el);
+    });
+    this.container.appendChild(this.grid);
   }
 
-  /** Builds and returns the full card grid element from the current state. */
-  private buildGrid(): HTMLElement {
-    const grid = document.createElement('div');
-    grid.className = 'game-grid';
-    const [cols] = getBoardDimensions(this.config.boardSize);
-    grid.style.setProperty('--grid-cols', String(cols));
-    const backImage = getTheme(this.config.theme).cardBackImage ?? null;
-    this.state.cards.forEach(card => {
-      const animate = card.id === this.lastFlippedId;
-      grid.appendChild(createCardElement(card, backImage, c => this.handleClick(c), animate));
-    });
-    return grid;
+  /** Replaces only the card elements whose IDs are listed, then updates the scoreboard. */
+  private updateCards(ids: number[], animate = false): void {
+    this.scoreBoard.update(this.state);
+    for (const id of ids) {
+      const card = this.state.cards.find(c => c.id === id)!;
+      const oldEl = this.cardElements.get(id)!;
+      const newEl = createCardElement(card, this.backImage, c => this.handleClick(c), animate);
+      oldEl.replaceWith(newEl);
+      this.cardElements.set(id, newEl);
+    }
   }
 
   /**
@@ -80,10 +89,8 @@ export class GameBoard {
     if (this.state.isLocked || this.state.flippedCards.length >= 2) return;
     const current = this.state.cards.find(c => c.id === card.id);
     if (!current || current.isFlipped || current.isMatched) return;
-    this.lastFlippedId = card.id;
     this.state = flipCard(this.state, card.id);
-    this.render();
-    this.lastFlippedId = null;
+    this.updateCards([card.id], true);
     if (this.state.flippedCards.length === 2) this.evaluate();
   }
 
@@ -98,20 +105,26 @@ export class GameBoard {
    * to finish before re-rendering, then checks for game over.
    */
   private onMatch(): void {
+    const [c1, c2] = this.state.flippedCards;
     this.state = markMatched(this.state);
     setTimeout(() => {
-      this.render();
+      this.updateCards([c1.id, c2.id]);
       if (isGameOver(this.state)) setTimeout(() => this.showGameOver(), 600);
     }, 650);
   }
 
-  /** Handles a mismatch: locks the board and flips the cards back after a short delay. */
+  /** Handles a mismatch: locks the board, plays the flip-back animation, then unflips. */
   private onMismatch(): void {
+    const [c1, c2] = this.state.flippedCards;
     this.state = { ...this.state, isLocked: true };
     setTimeout(() => {
-      this.state = unflipCards(this.state);
-      this.render();
-    }, 1000);
+      this.cardElements.get(c1.id)?.classList.add('card--unflipping');
+      this.cardElements.get(c2.id)?.classList.add('card--unflipping');
+      setTimeout(() => {
+        this.state = unflipCards(this.state);
+        this.updateCards([c1.id, c2.id]);
+      }, 500);
+    }, 600);
   }
 
   /** Replaces the game board with the game-over screen, which auto-transitions to the winner screen. */

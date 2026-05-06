@@ -36,7 +36,7 @@ class App {
   private startGame(config: GameConfig): void {
     this.container.innerHTML = '';
     this.container.className = 'app app--game';
-    new GameBoard(this.container, config, () => this.showStart());
+    new GameBoard(this.container, config, () => this.showSetup());
   }
 }
 

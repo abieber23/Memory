@@ -25,6 +25,7 @@ const PLAYER_OPTIONS: { value: PlayerColor; label: string }[] = [
 export class SetupScreen {
   private container: HTMLElement;
   private onStart: (config: GameConfig) => void;
+  private previewImg!: HTMLImageElement;
   private config: GameConfig = {
     player1Color: 'blue',
     player2Color: 'orange',
@@ -96,10 +97,18 @@ export class SetupScreen {
     const section = this.buildSection('Game themes', '🎨', 'blue');
     THEME_OPTIONS.forEach(opt => {
       const checked = this.config.theme === opt.value;
-      section.appendChild(this.buildRadio(opt.label, checked, () => {
+      const el = this.buildRadio(opt.label, checked, () => {
         this.config = { ...this.config, theme: opt.value };
         this.render();
-      }));
+      });
+      el.classList.add('setup__radio--theme');
+      el.addEventListener('mouseenter', () => {
+        this.previewImg.src = opt.preview;
+      });
+      el.addEventListener('mouseleave', () => {
+        this.previewImg.src = THEME_OPTIONS.find(t => t.value === this.config.theme)!.preview;
+      });
+      section.appendChild(el);
     });
     return section;
   }
@@ -186,6 +195,7 @@ export class SetupScreen {
     img.src = THEME_OPTIONS.find(t => t.value === this.config.theme)?.preview ?? previewCodeVibes;
     img.className = 'setup__preview-img';
     img.alt = 'Theme preview';
+    this.previewImg = img;
     div.appendChild(img);
     return div;
   }
